@@ -38,6 +38,9 @@ def scrape_data(url):
 
     #get exits
     data = soup.find("h3", string=lambda text: "Exits" in text)
+    #check if there are exits
+    if data is None: return scraping_data
+
     next_sibling = data.next_sibling
     new_fund_terms = ['launched','raised','held']
     new_fund = False
