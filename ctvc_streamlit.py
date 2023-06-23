@@ -8,7 +8,7 @@ import ctvc_compiling as compiling
 
 st.title("CTVC Newsletter Scraping!!")
 url = st.text_input('CTVC URL')
-openai_api_key = ''
+openai_api_key = st.secrets['openai_key']
 
 @st.cache_data
 def scrape_and_compile(url,openai_api_key):
