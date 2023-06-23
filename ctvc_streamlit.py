@@ -6,9 +6,9 @@ import ctvc_compiling as compiling
 
 #setup
 
-st.title("CTVC Newsletter Scraping")
+st.title("CTVC Newsletter Scraping!!")
 url = st.text_input('CTVC URL')
-openai_api_key = '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'
+openai_api_key = ''
 
 @st.cache_data
 def scrape_and_compile(url,openai_api_key):
