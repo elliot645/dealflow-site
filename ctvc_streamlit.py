@@ -14,7 +14,7 @@ with st.form("newsletter URL"):
     url = st.text_input('CTVC URL')
     submitted = st.form_submit_button("Submit")
 
-openai_api_key = "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" #st.secrets['openai_key']
+openai_api_key = st.secrets['openai_key']
 
 @st.cache_data
 def scrape_and_compile(url,openai_api_key):
