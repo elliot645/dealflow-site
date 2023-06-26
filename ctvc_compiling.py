@@ -94,14 +94,13 @@ def extract_deals(llm,scraper_deals):
     deal_chain = create_extraction_chain(llm, deal_scehema)
 
     max_deals = 20
-    deal_count = 0
+    average_deal_length = 220 #in characters
     text = ""
     output = []
+    
     for deal in scraper_deals:
-        deal_count += 1
-        if deal_count > max_deals:
+        if len(text) > max_deals*average_deal_length:
             output += deal_chain.predict_and_parse(text=(text))['data']['deal']
-            deal_count = 1
             text = ""
         text += deal + "\n"
     return output + deal_chain.predict_and_parse(text=(text))['data']['deal']

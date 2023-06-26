@@ -2,6 +2,10 @@ import requests
 from bs4 import BeautifulSoup
 
 #returns deals, exits, and links, and date in a dictionary
+
+
+
+
 def scrape_data(url):
     scraping_data = {'deals':[],'exits':[],'links':[],'date':""}
 
@@ -14,6 +18,27 @@ def scrape_data(url):
     next_sibling = data.next_sibling
     other_fundings = False
 
+
+    def add_links(block):
+        #number of distinct paragraphs in the block
+        num_paragraphs = len(block.find_all('br')) / 2 + 1
+        urls = block.find_all('a')
+
+        if num_paragraphs == 1:
+            if len(urls) != 0:
+                scraping_data['links'].append(urls[0].get('href'))
+            else:
+                scraping_data['links'].append(None)
+            return
+
+        #avoid unequal number of links and paragraphs
+        if len(urls) != num_paragraphs:
+            for i in range(num_paragraphs):
+                scraping_data['links'].append(None)
+        
+        for url in urls:
+            scraping_data['links'].append(url.get('href'))
+
     while next_sibling is not None:
         data = next_sibling
 
@@ -25,12 +50,13 @@ def scrape_data(url):
 
             #print out each deal and its link
             if ("p" in data.name): 
-                link = data.find("a")
 
                 #only print out debt financing deals if it is before other fundings
                 if ("debt" not in data.text) or (other_fundings == False):
-                    if link is not None: scraping_data['links'].append(link["href"])
-                    else: scraping_data['links'].append(None)
+                    # link = data.find("a")
+                    # if link is not None: scraping_data['links'].append(link.get('href'))
+                    # else: scraping_data['links'].append(None)
+                    add_links(data)
                     scraping_data['deals'].append(data.text)
             if ("Other Fundings" in data.text): other_fundings = True
 
@@ -55,8 +81,9 @@ def scrape_data(url):
             break
         scraping_data['exits'].append(data.text)
         #add exit links to the same list as deals
-        link = data.find("a")
-        scraping_data['links'].append(link["href"]) if link is not None else scraping_data['links'].append(None)
+        # link = data.find("a")
+        # scraping_data['links'].append(link.get('href')) if link is not None else scraping_data['links'].append(None)
+        add_links(data)
         next_sibling = next_sibling.next_sibling
     
     return scraping_data
