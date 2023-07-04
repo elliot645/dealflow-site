@@ -196,7 +196,7 @@ def ctvc_to_df(extracted_output,date,links):
     df = pd.DataFrame(extracted_output)
     df['date'] = date
     df['website'] = df['name'].apply(get_website)
-    df['Funding Announcment'] = links
+    df['Funding Announcment'] = links if len(links) == len(df) else None
     df = df.set_index('name')
     #df.to_csv(f"ctvc_{date}.csv")
     return df
