@@ -196,9 +196,12 @@ def ctvc_to_df(extracted_output,date,links):
     df = pd.DataFrame(extracted_output)
     df['date'] = date
     df['website'] = df['name'].apply(get_website)
-    df['Funding Announcment'] = links if len(links) == len(df) else None
+    if len(links) == len(df):
+        df['Funding Announcment'] = links 
+    else: 
+        df['Funding Announcment'] = None
+        print("Number of links does not match number of deals")
     df = df.set_index('name')
-    #df.to_csv(f"ctvc_{date}.csv")
     return df
 
 
