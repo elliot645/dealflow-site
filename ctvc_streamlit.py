@@ -8,7 +8,7 @@ import ctvc_compiling as compiling
 
 #setup
 
-st.title("CTVC Newsletter Scraping!!")
+st.title("CTVC Newsletter Scraper")
 
 with st.form("newsletter URL"):
     url = st.text_input('CTVC URL')
