@@ -5,12 +5,18 @@ from bs4 import BeautifulSoup
 #returns deals, exits, and links, and date in a dictionary
 def scrape_data(url):
     scraping_data = {'deals':[],'exits':[],'links':[],'date':""}
-
-    page = requests.get(url)
+    try:
+        page = requests.get(url)
+    except:
+        return None
     soup = BeautifulSoup(page.content, 'html.parser')
 
     #print out the date at the top
-    scraping_data['date'] += soup.find("time", class_="mt-1 sm:mt-0").text
+    try:
+        date = soup.find("time", class_="mt-1 sm:mt-0").text
+    except:
+        date = 'no date found'
+    scraping_data['date'] += date
     #data = soup.find("h2", string=re.compile("deals of the week",re.IGNORECASE)) #soup.find("h2", string=lambda text: "Deals of the Week" in text)
     h2_tags = soup.find_all('h2')
     for tag in h2_tags:
@@ -23,8 +29,8 @@ def scrape_data(url):
         if re.search("deals of the week", tag.text, re.IGNORECASE):
             data = tag
             break
-    
-    if data == None:
+    #check if data is an assigned variable 
+    if 'data' not in locals():
         return None
     next_sibling = data.next_sibling
     other_fundings = False
