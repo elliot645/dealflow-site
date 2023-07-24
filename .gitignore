@@ -2,3 +2,7 @@
 testing/
 #ignore all files in the extracting_historical directory
 extracting_historical/
+
+#other
+.vscode
+__pycache__/
