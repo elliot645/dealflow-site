@@ -1,0 +1,4 @@
+#ignore all files in the testing directory
+testing/
+#ignore all files in the extracting_historical directory
+extracting_historical/

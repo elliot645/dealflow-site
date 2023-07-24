@@ -4,22 +4,21 @@ import pandas as pd
 import ctvc_scraping as scraping
 import ctvc_compiling as compiling
 
-
-
 #setup
-
 st.title("CTVC Newsletter Scraper")
 
 with st.form("newsletter URL"):
     url = st.text_input('CTVC URL')
     submitted = st.form_submit_button("Submit")
 
-openai_api_key = st.secrets['openai_key']
+openai_api_key = "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" #st.secrets['openai_key']
 
 @st.cache_data
 def scrape_and_compile(url,openai_api_key):
     #scrape
     scrape_output = scraping.scrape_data(url)
+    if scrape_output == None:
+        return None
     #compile 
     llm = compiling.set_up_llm(openai_api_key)
     extracted_output = compiling.extract_deals(llm,scrape_output['deals'])
@@ -33,6 +32,9 @@ def convert_df(df):
 
 if submitted:   
     df = scrape_and_compile(url,openai_api_key)
+    if df is None:
+        st.write("No deals found")
+        st.stop()
     csv = convert_df(df)
 
     st.download_button(
@@ -43,11 +45,15 @@ if submitted:
     )
     st.write(df)
 
-    # scrape_output = scraping.scrape_data(url)
-    # st.write(len(scrape_output['deals']))
-    # st.write(len(scrape_output['exits']))
-    # for deal in scrape_output['deals']:
-    #     st.write(deal)
-    # for exit in scrape_output['exits']:
-    #     st.write(exit)
-    # st.write(scrape_output['links'])
+# full_df = pd.read_csv("all data.csv")
+# expander = st.expander("all deals")
+# expander.write(full_df)
+    
+# scrape_output = scraping.scrape_data(url)
+# st.write(len(scrape_output['deals']))
+# st.write(len(scrape_output['exits']))
+# for deal in scrape_output['deals']:
+#     st.write(deal)
+# for exit in scrape_output['exits']:
+#     st.write(exit)
+# st.write(scrape_output['links'])

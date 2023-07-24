@@ -22,6 +22,9 @@ def set_up_llm(openai_api_key):
 
 #Setup deal Schema
 def extract_deals(llm,scraper_deals):
+    if len(scraper_deals) == 0:
+        return []
+        
     deal_scehema = Object(
         # This what will appear in your output. It's what the fields below will be nested under.
         # It should be the parent of the fields below. Usually it's singular (not plural)
@@ -103,11 +106,15 @@ def extract_deals(llm,scraper_deals):
             output += deal_chain.predict_and_parse(text=(text))['data']['deal']
             text = ""
         text += deal + "\n"
+    if text == "":
+        return []
     return output + deal_chain.predict_and_parse(text=(text))['data']['deal']
     
 
 #EXITS:
 def extract_exits(llm,scraper_exits):
+    if len(scraper_exits) == 0:
+        return []
     exit_schema = Object(
         # This what will appear in your output. It's what the fields below will be nested under.
         # It should be the parent of the fields below. Usually it's singular (not plural)
@@ -190,7 +197,10 @@ def extract_exits(llm,scraper_exits):
 def get_website(name):
     url = f"https://autocomplete.clearbit.com/v1/companies/suggest?query={name}"
     response = requests.get(url).json()
-    return response[0]['domain'] if len(response) > 0 else None
+    if len(response) > 0:
+        if 'domain' in response[0]:
+            return response[0]['domain']
+    else: return None
 
 def ctvc_to_df(extracted_output,date,links):
     df = pd.DataFrame(extracted_output)
