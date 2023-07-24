@@ -8,8 +8,6 @@ import pandas as pd
 import requests
 import json
 
-import ctvc_scraping as ctvc
-
 def set_up_llm(openai_api_key):
     # Create extraction chain
     llm = ChatOpenAI(

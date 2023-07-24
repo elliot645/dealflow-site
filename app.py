@@ -1,8 +1,8 @@
 import streamlit as st
 import pandas as pd
 
-import ctvc_scraping as scraping
-import ctvc_compiling as compiling
+from src import ctvc_scraping as scraping
+from src import ctvc_compiling as compiling
 
 #setup
 st.title("CTVC Newsletter Scraper")
@@ -11,7 +11,8 @@ with st.form("newsletter URL"):
     url = st.text_input('CTVC URL')
     submitted = st.form_submit_button("Submit")
 
-openai_api_key = "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" #st.secrets['openai_key']
+openai_api_key = "placeholder" # st.secrets['openai_key']
+#openai_key = "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"
 
 @st.cache_data
 def scrape_and_compile(url,openai_api_key):
@@ -28,7 +29,7 @@ def scrape_and_compile(url,openai_api_key):
 @st.cache_data
 def convert_df(df):
     # IMPORTANT: Cache the conversion to prevent computation on every rerun
-    return df.to_csv().encode('utf-8')
+    return df.to_csv('src/newsletter_data').encode('utf-8')
 
 if submitted:   
     df = scrape_and_compile(url,openai_api_key)
