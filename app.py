@@ -28,7 +28,7 @@ def scrape_and_compile(url,openai_api_key):
 @st.cache_data
 def convert_df(df):
     # IMPORTANT: Cache the conversion to prevent computation on every rerun
-    return df.to_csv('src/newsletter_data').encode('utf-8')
+    return df.to_csv('newsletter_data').encode('utf-8')
 
 if submitted:   
     df = scrape_and_compile(url,openai_api_key)
