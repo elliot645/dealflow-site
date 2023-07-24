@@ -4,5 +4,5 @@ testing/
 extracting_historical/
 
 #other
-.vscode
 __pycache__/
+.vscode/
