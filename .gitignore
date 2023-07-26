@@ -6,3 +6,4 @@ extracting_historical/
 #other
 __pycache__/
 .vscode/
+secrets.txt

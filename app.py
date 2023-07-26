@@ -22,7 +22,10 @@ with tab1:
         url = st.text_input('CTVC URL')
         submitted = st.form_submit_button("Submit")
 
-    openai_api_key = st.secrets['openai_key']
+    with open('secrets.txt', 'r') as file:
+        openai_api_key = file.readline()
+
+    #openai_api_key = st.secrets['openai_key']
     
     @st.cache_data
     def scrape_and_compile(url,openai_api_key):
