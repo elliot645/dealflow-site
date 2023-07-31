@@ -60,13 +60,30 @@ with tab1:
     #st.write(df)
 
 with tab2:
+    #deal trends
+    st.write("Deal trends:")
+    historical_deals = pd.read_csv("src/main df of all deals.csv", index_col=0)
 
-    historical_deals = pd.read_csv("src/main df of all deals.csv",index_col=0)
-    st.dataframe(historical_deals)
-
-    #create a new data frame called chart deals that only contains pre-seed through Series D that will be used to make a streamlit bar chart
-    chart_deals = historical_deals[(historical_deals['stage'] == 'Pre-Seed') | (historical_deals['stage'] == 'Seed') | (historical_deals['stage'] == 'Series A') | (historical_deals['stage'] == 'Series B') | (historical_deals['stage'] == 'Series C') | (historical_deals['stage'] == 'Series D')]
-
-    specified_stages = ["Undisclosed","Seed", "Seed+", "pre-Seed", "Pre-Seed", "Pre-seed", "Pre Series A", "Series A", "Series B", "Series C", "Series D", "Series E"]
+    specified_stages = ["Seed", "Seed+", "pre-Seed", "Pre-Seed", "Pre-seed", "Pre Series A", "Series A", "Series B", "Series C"] #, "Series D", "Series E"]
     filtered_data_specified_stages = historical_deals[historical_deals['stage'].isin(specified_stages)]
-    grouped_filtered_data_specified_stages = filtered_data_specified_stages.groupby('date')['amount_raised'].sum().reset_index()
+
+    # Convert the 'date' column to datetime
+    filtered_data_specified_stages['date'] = pd.to_datetime(filtered_data_specified_stages['date'])
+
+    # Convert 'amount_raised' to a numeric type, coercing errors to NaN
+    filtered_data_specified_stages['amount_raised'] = pd.to_numeric(filtered_data_specified_stages['amount_raised'], errors='coerce')
+
+    # Define 4-week periods
+    filtered_data_specified_stages['period'] = (filtered_data_specified_stages['date'].dt.to_period('M'))
+
+    # Group by period and stage, summing the amount raised
+    grouped_data_specified_stages = filtered_data_specified_stages.groupby(['period', 'stage'])['amount_raised'].sum().unstack().fillna(0)
+
+    # Convert period index back to string
+    grouped_data_specified_stages.index = grouped_data_specified_stages.index.astype(str)
+
+    # Create the streamlit bar chart
+    st.bar_chart(grouped_data_specified_stages)
+
+    st.write("All deals:")
+    st.dataframe(historical_deals)
