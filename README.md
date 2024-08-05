@@ -3,7 +3,7 @@ Streamlit based website [https://climatedeals.streamlit.app/] that scrapes the w
 
 Website I built:
 
-![image](https://github.com/user-attachments/assets/ac8fcb0e-6127-4396-960a-8012d6a5d0a3)
+![image](https://github.com/user-attachments/assets/e7e4a853-526e-4c3e-a970-527f3f5b9d51)
 
 Website that is scraped:
 
